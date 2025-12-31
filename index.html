@@ -1,312 +1,621 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div class="bg"></div>
-    <main class="new-year-body">
-        <h1 class="new-year">Happy New Year</h1>
-        <p class="year">2023</p>
-        <button class="btn">Click Here!</button>
-    </main>
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shatter The Past - 2026 Reveal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <style>
-       @import url("https://fonts.googleapis.com/css2?family=Neonderthaw&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Megrim&display=swap");
+        :root {
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --neon-blue: #a8efff;
+        }
 
-body {
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: url("https://images.unsplash.com/photo-1524334228333-0f6db392f8a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80")
-    no-repeat center center;
-  background-size: cover;
-  overflow: hidden;
-}
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Cinzel', serif;
+        }
 
-.new-year-body {
-  text-align: center;
-  color: white;
-  text-transform: uppercase;
-}
+        /* Ambient Background */
+        .bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1a2a3a 0%, #000000 100%);
+            z-index: 0;
+        }
 
-.new-year {
-  font-size: 5rem;
-  letter-spacing: 5px;
-  margin-bottom: 0;
-  text-shadow: 0 0 25px white, 0 0 50px white, 0 0 100px white;
-  font-family: "Megrim", cursive, sans-serif;
-}
+        /* Canvas Layer */
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            pointer-events: none; /* Let clicks pass through if needed */
+        }
 
-.year {
-  margin: 0;
-  font-size: 8rem;
-  letter-spacing: 10px;
-  font-family: "Neonderthaw", "Poiret One", cursive;
-  text-shadow: 0 0 25px white, 0 0 50px white, 0 0 100px white;
-}
+        /* UI Container */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
 
-.btn {
-  margin-top: 4rem;
-  width: 8rem;
-  height: 8rem;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  color: #0c0f0a;
-  padding: 1rem;
-  font-family: "Allerta Stencil", sans-serif;
-  border: none;
-  box-shadow: 0 0 25px white, 0 0 50px white, 0 0 100px white;
-  outline: 4px solid white;
-  outline-offset: 10px;
-}
+        /* Frosted Glass Panel (Intro) */
+        .glass-panel {
+            width: 300px;
+            height: 200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s;
+        }
 
-.btn:hover {
-  outline-offset: 4px;
-}
+        /* Shine effect on glass */
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 6s infinite linear;
+            pointer-events: none;
+        }
 
-.snow {
-  position: absolute;
-  top: -10%;
-  border-radius: 50%;
-  background-color: white;
-  box-shadow: 0 0 0px #fff, 0 0 50px #fff;
-}
+        @keyframes shine {
+            0% { transform: translateX(-50%) rotate(45deg); }
+            100% { transform: translateX(50%) rotate(45deg); }
+        }
 
-.snowAnimation1 {
-  animation: snowFall1 linear infinite;
-}
-.snowAnimation2 {
-  animation: snowFall2 linear infinite;
-}
-.snowAnimation3 {
-  animation: snowFall3 linear infinite;
-}
-.snowAnimation4 {
-  animation: snowFall4 linear infinite;
-}
+        h2.intro-title {
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
 
-@keyframes snowFall1 {
-  0% {
-    transform: translate(0vw, 0vh);
-  }
-  100% {
-    transform: translate(50vw, 150vh);
-  }
-}
-@keyframes snowFall2 {
-  0% {
-    transform: translate(-10vw, -10vh);
-  }
-  100% {
-    transform: translate(60vw, 150vh);
-  }
-}
-@keyframes snowFall3 {
-  0% {
-    transform: translate(10vw, 0vh);
-  }
-  100% {
-    transform: translate(40vw, 150vh);
-  }
-}
-@keyframes snowFall4 {
-  0% {
-    transform: translate(0vw, 0vh);
-  }
-  100% {
-    transform: translate(40vw, 150vh);
-  }
-}
+        /* Break Button */
+        .break-btn {
+            padding: 15px 40px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-.white {
-  text-shadow: 0 0 25px #fff, 0 0 50px #fff, 0 0 100px #fff;
-}
-.btn-white {
-  box-shadow: 0 0 25px #fff, 0 0 50px #fff, 0 0 100px #fff;
-}
-.snow-white {
-  box-shadow: 0 0 0px #fff, 0 0 50px #fff;
-}
-.green {
-  text-shadow: 0 0 5px #1fd224, 0 0 25px #1fd224, 0 0 50px #1fd224,
-    0 0 100px #1fd224, 0 0 200px #1fd224;
-}
-.btn-green {
-  box-shadow: 0 0 5px #1fd224, 0 0 25px #1fd224, 0 0 50px #1fd224,
-    0 0 100px #1fd224, 0 0 200px #1fd224;
-}
-.snow-green {
-  box-shadow: 0 0 20px #1fd224, 0 0 50px #1fd224;
-}
-.orange {
-  text-shadow: 0 0 5px #ffaa01, 0 0 25px #ffaa01, 0 0 50px #ffaa01,
-    0 0 100px #ffaa01, 0 0 200px #ffaa01;
-}
-.btn-orange {
-  box-shadow: 0 0 5px #ffaa01, 0 0 25px #ffaa01, 0 0 50px #ffaa01,
-    0 0 100px #ffaa01, 0 0 200px #ffaa01;
-}
-.snow-orange {
-  box-shadow: 0 0 20px #ffaa01, 0 0 50px #ffaa01;
-}
-.pink {
-  text-shadow: 0 0 5px #ff00aa, 0 0 25px #ff00aa, 0 0 50px #ff00aa,
-    0 0 100px #ff00aa, 0 0 200px #ff00aa;
-}
-.btn-pink {
-  box-shadow: 0 0 5px #ff00aa, 0 0 25px #ff00aa, 0 0 50px #ff00aa,
-    0 0 100px #ff00aa, 0 0 200px #ff00aa;
-}
-.snow-pink {
-  box-shadow: 0 0 20px #ff00aa, 0 0 50px #ff00aa;
-}
-.violet {
-  text-shadow: 0 0 5px #aa00ff, 0 0 25px #aa00ff, 0 0 50px #aa00ff,
-    0 0 100px #aa00ff, 0 0 200px #aa00ff;
-}
-.btn-violet {
-  box-shadow: 0 0 5px #aa00ff, 0 0 25px #aa00ff, 0 0 50px #aa00ff,
-    0 0 100px #aa00ff, 0 0 200px #aa00ff;
-}
-.snow-violet {
-  box-shadow: 0 0 20px #aa00ff, 0 0 50px #aa00ff;
-}
-.blue {
-  text-shadow: 0 0 5px #00aaff, 0 0 25px #00aaff, 0 0 50px #00aaff,
-    0 0 100px #00aaff, 0 0 200px #00aaff;
-}
-.btn-blue {
-  box-shadow: 0 0 5px #00aaff, 0 0 25px #00aaff, 0 0 50px #00aaff,
-    0 0 100px #00aaff, 0 0 200px #00aaff;
-}
-.snow-blue {
-  box-shadow: 0 0 20px #00aaff, 0 0 50px #00aaff;
-}
-.red {
-  text-shadow: 0 0 5px #f00, 0 0 25px #f00, 0 0 50px #f00, 0 0 100px #f00,
-    0 0 200px #f00;
-}
-.btn-red {
-  box-shadow: 0 0 5px #f00, 0 0 25px #f00, 0 0 50px #f00, 0 0 100px #f00,
-    0 0 200px #f00;
-}
-.snow-red {
-  box-shadow: 0 0 20px #f00, 0 0 50px #f00;
-}
-.yellow {
-  text-shadow: 0 0 5px #ffea00, 0 0 25px #ffea00, 0 0 50px #ffea00,
-    0 0 100px #ffea00, 0 0 200px #ffea00;
-}
-.btn-yellow {
-  box-shadow: 0 0 5px #ffea00, 0 0 25px #ffea00, 0 0 50px #ffea00,
-    0 0 100px #ffea00, 0 0 200px #ffea00;
-}
-.snow-yellow {
-  box-shadow: 0 0 20px #ffea00, 0 0 50px #ffea00;
-}
+        .break-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
 
+        .break-btn:active {
+            transform: scale(0.95);
+        }
 
+        /* Bottom Text Container */
+        #text-container {
+            position: absolute;
+            bottom: 15%;
+            width: 100%;
+            text-align: center;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .typewriter-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            min-height: 1.5em;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+            opacity: 0; /* Hidden initially */
+        }
+
+        /* Overlay flash for explosion */
+        #flash-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Shake Class */
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .glass-panel { width: 80%; }
+            .typewriter-text { font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
 
+    <div class="bg-gradient"></div>
+    <div id="flash-overlay"></div>
+    <canvas id="mainCanvas"></canvas>
 
+    <div id="ui-layer">
+        <div class="glass-panel" id="intro-panel">
+            <h2 class="intro-title">Ready for the Future?</h2>
+            <button class="break-btn" id="break-btn">Break The Year</button>
+        </div>
+    </div>
 
-    <script>
-       const snowFall = () => {
-  const bg = document.querySelector(".bg");
-  for (let i = 0; i < 300; i++) {
-    const snow = document.createElement("span");
-    snow.classList.add("snow");
-    if (i % 4 === 0) {
-      snow.classList.add("snowAnimation1");
-    } else if (i % 4 === 1) {
-      snow.classList.add("snowAnimation2");
-    } else if (i % 4 === 2) {
-      snow.classList.add("snowAnimation3");
-    } else {
-      snow.classList.add("snowAnimation4");
+    <div id="text-container">
+        <div class="typewriter-text" id="footer-text"></div>
+    </div>
+
+<script>
+    /**
+     * CONFIGURATION
+     */
+    const CONFIG = {
+        particleCountDesktop: 1800,
+        particleCountMobile: 800,
+        fontFamily: "'Cinzel', serif",
+        colors: ['#ffffff', '#a8efff', '#70a1ff', '#dfe6e9'], // Glass/Ice tones
+        text2025: "2025",
+        text6: "6",
+        digit5Index: 3 // The index of '5' in "2025" (0,1,2,3)
+    };
+
+    /**
+     * STATE MANAGEMENT
+     */
+    let state = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        isMobile: window.innerWidth < 768,
+        particles: [],
+        particles6: [], // Pool for the number 6
+        isExploded: false,
+        mouse: { x: 0, y: 0 }
+    };
+
+    // DOM Elements
+    const canvas = document.getElementById('mainCanvas');
+    const ctx = canvas.getContext('2d');
+    const uiLayer = document.getElementById('ui-layer');
+    const introPanel = document.getElementById('intro-panel');
+    const breakBtn = document.getElementById('break-btn');
+    const flashOverlay = document.getElementById('flash-overlay');
+    const footerText = document.getElementById('footer-text');
+
+    // Resize Handler
+    function resize() {
+        state.width = window.innerWidth;
+        state.height = window.innerHeight;
+        state.isMobile = state.width < 768;
+        canvas.width = state.width;
+        canvas.height = state.height;
     }
-    const aNumber = -50 + randomNumber(150);
-    const timeDelay = randomNumber(10);
-    const animDuration = 5 + randomNumber(10) + Math.random() + 0.2;
-    const snowOpacity = randomNumber(10) * 0.1;
-    const heightWidth = randomNumber(11) + 5;
-    snow.style.width = `${heightWidth}px`;
-    snow.style.height = `${heightWidth}px`;
-    snow.style.left = `${aNumber}%`;
-    snow.style.animationDelay = `${timeDelay}s`;
-    snow.style.animationDuration = `${animDuration}s`;
-    snow.style.opacity = `${snowOpacity}`;
-    bg.appendChild(snow);
-  }
-};
+    window.addEventListener('resize', resize);
+    resize();
 
-const randomNumber = (limit) => {
-  return Math.floor(Math.random() * limit);
-};
-
-snowFall();
-
-const textShadowColor = [
-  "white",
-  "green",
-  "orange",
-  "pink",
-  "violet",
-  "blue",
-  "red",
-  "yellow",
-];
-const color = [
-  "#0c0f0a",
-  "#1fd224",
-  "#ffaa01",
-  "#ff00aa",
-  "#aa00ff",
-  "#00aaff",
-  "#f00",
-  "#ffea00",
-];
-let count = 1;
-
-const glowingText = (count) => {
-  const btn = document.querySelector(".btn");
-  const newYear = document.querySelector(".new-year");
-  const year = document.querySelector(".year");
-  const snow = document.querySelectorAll(".snow");
-
-  btn.addEventListener("click", () => {
-    if (count !== 0) {
-      newYear.classList.remove(textShadowColor[count - 1]);
-      year.classList.remove(textShadowColor[count - 1]);
-      btn.classList.remove(`btn-${textShadowColor[count - 1]}`);
-      snow.forEach((e) => {
-        e.classList.remove(`snow-${textShadowColor[count - 1]}`);
-      });
-    }
-    if (count === textShadowColor.length) {
-      count = 0;
-    }
-
-    newYear.classList.add(textShadowColor[count]);
-    year.classList.add(textShadowColor[count]);
-    btn.classList.add(`btn-${textShadowColor[count]}`);
-    snow.forEach((e) => {
-      e.classList.add(`snow-${textShadowColor[count]}`);
+    // Mouse Move for Parallax
+    window.addEventListener('mousemove', (e) => {
+        // Normalize mouse from -1 to 1
+        state.mouse.x = (e.clientX / state.width) * 2 - 1;
+        state.mouse.y = (e.clientY / state.height) * 2 - 1;
     });
-    btn.innerHTML = "Click Again!";
-    btn.style.color = `${color[count]}`;
-    count++;
-  });
-};
-glowingText(count);
 
+    /**
+     * PARTICLE CLASS (The Glass Shard)
+     */
+    class Shard {
+        constructor(x, y, type = 'random') {
+            this.x = x;
+            this.y = y;
+            this.z = Math.random() * 2; // For sizing depth
+            this.originX = x;
+            this.originY = y;
+            
+            // Destination coordinates
+            this.targetX = x;
+            this.targetY = y;
+            
+            // Physics properties
+            this.vx = (Math.random() - 0.5) * 2;
+            this.vy = (Math.random() - 0.5) * 2;
+            this.rotation = Math.random() * Math.PI * 2;
+            this.rotationSpeed = (Math.random() - 0.5) * 0.05;
+            
+            // Appearance
+            this.size = (Math.random() * 5 + 2) * (state.isMobile ? 0.8 : 1);
+            this.color = CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)];
+            this.alpha = Math.random() * 0.5 + 0.3;
+            
+            // Triangle shape variation
+            this.p1 = { x: Math.random() * this.size, y: Math.random() * this.size };
+            this.p2 = { x: Math.random() * this.size - this.size, y: Math.random() * this.size };
+            this.p3 = { x: Math.random() * this.size - this.size/2, y: Math.random() * this.size - this.size };
+            
+            this.type = type; // 'random', 'text', 'hidden'
+            this.visible = true;
+        }
 
-    </script>
+        draw(ctx, mouseX, mouseY) {
+            if (!this.visible || this.alpha <= 0.01) return;
+
+            // Parallax offset
+            const px = this.x + (mouseX * 20 * this.z);
+            const py = this.y + (mouseY * 20 * this.z);
+
+            ctx.save();
+            ctx.translate(px, py);
+            ctx.rotate(this.rotation);
+            ctx.globalAlpha = this.alpha;
+            
+            // Add slight bloom logic based on rotation (simulating reflection)
+            const glint = Math.abs(Math.sin(this.rotation * 2));
+            if (glint > 0.8) {
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.globalAlpha = Math.min(1, this.alpha + 0.3);
+            }
+
+            ctx.fillStyle = this.color;
+            
+            ctx.beginPath();
+            ctx.moveTo(this.p1.x, this.p1.y);
+            ctx.lineTo(this.p2.x, this.p2.y);
+            ctx.lineTo(this.p3.x, this.p3.y);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+    }
+
+    /**
+     * TEXT SAMPLING (Generate coordinates from font)
+     */
+    function getTextCoordinates(text, fontSize) {
+        const offCanvas = document.createElement('canvas');
+        const offCtx = offCanvas.getContext('2d');
+        offCanvas.width = state.width;
+        offCanvas.height = state.height;
+
+        offCtx.font = `bold ${fontSize}px ${CONFIG.fontFamily.replace(/'/g, "")}`;
+        offCtx.textAlign = 'center';
+        offCtx.textBaseline = 'middle';
+        offCtx.fillStyle = '#ffffff';
+        
+        // Draw text in center
+        offCtx.fillText(text, state.width / 2, state.height / 2);
+
+        const imageData = offCtx.getImageData(0, 0, state.width, state.height).data;
+        const coordinates = [];
+        
+        // Scan step (optimization)
+        const step = state.isMobile ? 5 : 4; 
+
+        for (let y = 0; y < state.height; y += step) {
+            for (let x = 0; x < state.width; x += step) {
+                const alpha = imageData[(y * state.width + x) * 4 + 3];
+                if (alpha > 128) {
+                    coordinates.push({ x, y });
+                }
+            }
+        }
+        return coordinates;
+    }
+
+    /**
+     * INITIALIZATION & ANIMATION LOGIC
+     */
+
+    function initParticles() {
+        // Create initial random dust/shards
+        const count = state.isMobile ? CONFIG.particleCountMobile : CONFIG.particleCountDesktop;
+        
+        for (let i = 0; i < count; i++) {
+            // Start at center for explosion effect
+            const x = state.width / 2 + (Math.random() - 0.5) * 10;
+            const y = state.height / 2 + (Math.random() - 0.5) * 10;
+            state.particles.push(new Shard(x, y, 'random'));
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Update rotations
+        state.particles.forEach(p => {
+            p.rotation += p.rotationSpeed;
+            p.draw(ctx, state.mouse.x, state.mouse.y);
+        });
+        
+        state.particles6.forEach(p => {
+            p.rotation += p.rotationSpeed;
+            p.draw(ctx, state.mouse.x, state.mouse.y);
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    /**
+     * THE SEQUENCE
+     */
+
+    function triggerExplosion() {
+        state.isExploded = true;
+        
+        // 1. UI Feedback
+        introPanel.classList.add('shake'); // Shake DOM
+        gsap.to(flashOverlay, { opacity: 0.8, duration: 0.1, yoyo: true, repeat: 1 });
+        gsap.to(uiLayer, { opacity: 0, duration: 0.5, delay: 0.1, onComplete: () => uiLayer.style.display = 'none' });
+
+        // 2. Play Sound (Simulated via simple object approach or HTML audio if available)
+        // Note: Browsers block auto audio often, assuming user clicked button so it's safer.
+        
+        // 3. Explode Particles Outward
+        state.particles.forEach(p => {
+            const angle = Math.random() * Math.PI * 2;
+            const radius = Math.random() * (state.width * 0.8); // Blast radius
+            
+            gsap.to(p, {
+                x: state.width/2 + Math.cos(angle) * radius,
+                y: state.height/2 + Math.sin(angle) * radius,
+                rotation: Math.random() * 10,
+                duration: 1.5,
+                ease: "power4.out"
+            });
+        });
+
+        // 4. Trigger Formation Sequence
+        setTimeout(formYear2025, 1200);
+    }
+
+    function formYear2025() {
+        // Calculate font size
+        const fontSize = state.isMobile ? state.width * 0.25 : state.width * 0.15;
+        
+        // Get coordinates for "2025"
+        const coords2025 = getTextCoordinates(CONFIG.text2025, fontSize);
+        
+        // Shuffle coordinates to make assembly look organic
+        coords2025.sort(() => Math.random() - 0.5);
+
+        // We need to separate coords for "202" and "5"
+        // Find the split point roughly. 
+        // "2025" -> Since it's centered, the '5' is on the right side.
+        // Let's find the Min and Max X to determine the range.
+        let minX = state.width, maxX = 0;
+        coords2025.forEach(c => {
+            if(c.x < minX) minX = c.x;
+            if(c.x > maxX) maxX = c.x;
+        });
+        
+        // Threshold: approximate split point for the last digit (75% across the width of the text)
+        const splitX = minX + (maxX - minX) * 0.75;
+
+        const coordsMain = []; // "202"
+        const coords5 = [];    // "5"
+
+        coords2025.forEach(c => {
+            if (c.x > splitX) {
+                coords5.push(c);
+            } else {
+                coordsMain.push(c);
+            }
+        });
+
+        // Assign particles
+        // Reuse existing particles. If not enough, existing ones double duty or some just fade.
+        let pIndex = 0;
+
+        // Animate "202"
+        coordsMain.forEach((target, i) => {
+            if (pIndex < state.particles.length) {
+                const p = state.particles[pIndex];
+                p.type = 'main'; // Mark as part of 202
+                gsap.to(p, {
+                    x: target.x,
+                    y: target.y,
+                    rotation: 0,
+                    alpha: 0.9,
+                    duration: 2.5,
+                    ease: "expo.inOut",
+                    delay: Math.random() * 0.5
+                });
+                pIndex++;
+            }
+        });
+
+        // Animate "5"
+        coords5.forEach((target, i) => {
+            if (pIndex < state.particles.length) {
+                const p = state.particles[pIndex];
+                p.type = 'digit5'; // Mark as part of 5
+                gsap.to(p, {
+                    x: target.x,
+                    y: target.y,
+                    rotation: 0,
+                    alpha: 0.9,
+                    duration: 2.5,
+                    ease: "expo.inOut",
+                    delay: Math.random() * 0.5
+                });
+                pIndex++;
+            }
+        });
+
+        // Hide unused particles
+        for (let i = pIndex; i < state.particles.length; i++) {
+            gsap.to(state.particles[i], {
+                alpha: 0,
+                duration: 1
+            });
+        }
+
+        // Trigger the change from 5 to 6
+        setTimeout(() => transform5to6(fontSize, splitX), 4000);
+    }
+
+    function transform5to6(fontSize, splitX) {
+        // 1. Break the "5"
+        state.particles.forEach(p => {
+            if (p.type === 'digit5') {
+                gsap.to(p, {
+                    y: p.y - 150 - Math.random() * 100, // Float up
+                    x: p.x + (Math.random() - 0.5) * 50, // Drift
+                    rotation: Math.random() * 5,
+                    alpha: 0,
+                    duration: 1.5,
+                    ease: "power2.in"
+                });
+            }
+        });
+
+        // 2. Prepare "6"
+        // We need to render "2026" to get the exact position of '6' relative to '202'
+        // But simpler: Render "6" at the same center, then offset X coordinates to match where "5" was.
+        // Better approach: Render "2026", grab coords where X > splitX.
+        
+        const coords2026 = getTextCoordinates("2026", fontSize);
+        const coords6 = coords2026.filter(c => c.x > splitX);
+
+        // Create specific particles for "6"
+        // Start them from below
+        coords6.forEach(target => {
+            // Create new shards for the 6
+            const p = new Shard(target.x, state.height + 100, 'digit6');
+            p.alpha = 0;
+            p.color = '#a8efff'; // brighter blue for the new year
+            state.particles6.push(p);
+
+            gsap.to(p, {
+                x: target.x,
+                y: target.y,
+                alpha: 1,
+                rotation: 0,
+                duration: 2,
+                ease: "back.out(1.2)",
+                delay: 1.5 + Math.random() * 0.5 // Wait for 5 to leave
+            });
+        });
+        
+        // Final Light Sweep Effect
+        setTimeout(triggerFinalEffects, 4000);
+    }
+
+    function triggerFinalEffects() {
+        // 1. Text Typewriter
+        const lines = ["From Birendra Pal💕", "Happy New Year 2026 💕Make Your Brighter Future 💕"];
+        let lineIndex = 0;
+        let charIndex = 0;
+        
+        footerText.style.opacity = 1;
+
+        function typeLine() {
+            if (lineIndex >= lines.length) return;
+            
+            const currentLine = lines[lineIndex];
+            
+            if (charIndex < currentLine.length) {
+                footerText.innerHTML = currentLine.substring(0, charIndex + 1) + '<span style="border-right: 2px solid white"></span>';
+                charIndex++;
+                setTimeout(typeLine, 50 + Math.random() * 50);
+            } else {
+                // Line finished
+                setTimeout(() => {
+                    if (lineIndex === 0) {
+                        // Fade out first line, clear, type next
+                        gsap.to(footerText, { opacity: 0, duration: 0.5, onComplete: () => {
+                            footerText.innerHTML = "";
+                            footerText.style.opacity = 1;
+                            lineIndex++;
+                            charIndex = 0;
+                            typeLine();
+                        }});
+                    }
+                }, 1500);
+            }
+        }
+        
+        typeLine();
+
+        // 2. Add a lens flare glow behind the text
+        const flare = document.createElement('div');
+        flare.style.position = 'absolute';
+        flare.style.left = '50%';
+        flare.style.top = '50%';
+        flare.style.transform = 'translate(-50%, -50%) scale(0)';
+        flare.style.width = '60vw';
+        flare.style.height = '60vw';
+        flare.style.background = 'radial-gradient(circle, rgba(168, 239, 255, 0.15) 0%, transparent 70%)';
+        flare.style.pointerEvents = 'none';
+        flare.style.zIndex = '5';
+        document.body.appendChild(flare);
+        
+        gsap.to(flare, { scale: 1, duration: 2, ease: "power2.out" });
+    }
+
+    // Init Logic
+    initParticles();
+    animate();
+
+    // Interaction
+    breakBtn.addEventListener('click', triggerExplosion);
+
+</script>
 </body>
 </html>
